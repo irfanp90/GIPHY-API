@@ -9,8 +9,7 @@ var sportTeams = [
   "Chicago Bears"
 ];
 //getting giphy and rating API information
-function displaySportInfo() {
-  var sport = $(this).attr("data-name");
+function displaySportInfo(sport) {
   var queryURL =
     "https://api.giphy.com/v1/gifs/search?api_key=G1Zql4AYAz9nnSX7rqeWX5G3fpH81waW&q=" +
     sport +
@@ -40,9 +39,9 @@ function displaySportInfo() {
       image.attr("class", "gif");
 
       sportDiv.append(image);
+      //appending both image and rating onto the html
+      $("#image").append(sportDiv);
     }
-    //appending both image and rating onto the html
-    $("#image").append(sportDiv);
   });
 }
 //to pause and animate the giphy
@@ -82,6 +81,10 @@ $("#add-sport").on("click", function(event) {
 });
 
 //this will trigger the button of the team to show the giphy and rating
-$(document).on("click", ".sport-btn", displaySportInfo);
+$(document).on("click", ".sport-btn", function() {
+  $("#image").empty();
+  var sport = $(this).attr("data-name");
+  displaySportInfo(sport);
+});
 
 renderButtons();
