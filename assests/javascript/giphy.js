@@ -8,45 +8,58 @@ var sportTeams = [
   "Chicago Cubs",
   "Chicago Bears"
 ];
-
+//getting giphy and rating API information
 function displaySportInfo() {
   var sport = $(this).attr("data-name");
   var queryURL =
-    "https://api.giphy.com/v1/gifs/search?q=" +
+    "https://api.giphy.com/v1/gifs/search?api_key=G1Zql4AYAz9nnSX7rqeWX5G3fpH81waW&q=" +
     sport +
-    "&api_key=G1Zql4AYAz9nnSX7rqeWX5G3fpH81waW&limit10";
+    "&limit=10&offset=0&rating=PG&lang=en";
 
-  //you are getting the API and have it add it to your HTML
   $.ajax({
     url: queryURL,
     method: "GET"
   }).then(function(response) {
-    console.log("hello", response);
-    var results = response.data;
-    for (var i = 0; i < results.length; i++) {
-      if (results[i].rating !== "r" && results[i].rating !== "pg-13") {
-        //creating a div to put the giphy image
-        var sportDiv = $("<div class='sport'>");
-        var rating = results[i].rating;
-        var p = $("<p>").text("Rating:" + rating);
-        sportDiv.append(p);
+    for (var i = 0; i < response.data.length; i++) {
+      console.log("hello", response);
 
-        //storing  the giphy image
-        var image = $("<img>");
-        image
-          .attr("src", results[i].images.fixed_height.url)
-          .attr("class", "gif");
+      //creating a div to put the rating
+      var sportDiv = $("<div class='sport'>");
+      var rating = response.data[0].rating;
+      var p = $("<p>").text("Rating:" + rating);
+      sportDiv.append(p);
 
-        sportDiv.append(p);
-        sportDiv.append(image);
-      }
+      //storing  the giphy image both still and animate
+      var stillLink = response.data[0].images.fixed_height_still.url;
+      var animatedLink = response.data[0].images.fixed_height.url;
+      var image = $("<img>");
+      image.attr("src", animatedLink);
+      image.attr("data-stillLink", stillLink);
+      image.attr("data-animatedLink", animatedLink);
+      image.attr("data-currentstate", "animated");
+      image.attr("class", "gif");
+
+      sportDiv.append(image);
     }
-
-    $("#buttons-view").append(sportDiv);
+    //appending both image and rating onto the html
+    $("#image").append(sportDiv);
   });
 }
+//to pause and animate the giphy
+$(document).on("click", ".gif", function() {
+  console.log("clicked", $(this).data().currentstate);
 
-//Function for displaying sport teams
+  if ($(this).data().currentstate === "animated") {
+    console.log("STILL ", $(this).data().stilllink);
+    $(this).attr("src", $(this).data().stilllink);
+    $(this).data("currentstate", "still");
+  } else {
+    console.log("ANIMATE!", $(this).data().animatedlink);
+    $(this).attr("src", $(this).data().animatedlink);
+    $(this).data("currentstate", "animated");
+  }
+});
+//Function for displaying a button added by user representing a sport team
 function renderButtons() {
   $("#buttons-view").empty();
   for (var i = 0; i < sportTeams.length; i++) {
@@ -58,7 +71,7 @@ function renderButtons() {
   }
 }
 
-//Function hand event where sport button click
+//Function for displaying the sport team input in the text box
 $("#add-sport").on("click", function(event) {
   event.preventDefault();
   var sport = $("#sport-input")
@@ -68,6 +81,7 @@ $("#add-sport").on("click", function(event) {
   renderButtons();
 });
 
+//this will trigger the button of the team to show the giphy and rating
 $(document).on("click", ".sport-btn", displaySportInfo);
 
 renderButtons();
