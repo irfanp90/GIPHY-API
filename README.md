@@ -1,1 +1,0 @@
-This project consist of inputting your favorite sport team. Then your team will be added to the rows of button. Finally when you click the button a giphy will appear with its rating. Furthermore, when you click the giphy it will pause and animate.
