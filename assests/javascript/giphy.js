@@ -25,13 +25,13 @@ function displaySportInfo() {
 
       //creating a div to put the rating
       var sportDiv = $("<div class='sport'>");
-      var rating = response.data[0].rating;
+      var rating = response.data[i].rating;
       var p = $("<p>").text("Rating:" + rating);
       sportDiv.append(p);
 
       //storing  the giphy image both still and animate
-      var stillLink = response.data[0].images.fixed_height_still.url;
-      var animatedLink = response.data[0].images.fixed_height.url;
+      var stillLink = response.data[i].images.fixed_height_still.url;
+      var animatedLink = response.data[i].images.fixed_height.url;
       var image = $("<img>");
       image.attr("src", animatedLink);
       image.attr("data-stillLink", stillLink);
