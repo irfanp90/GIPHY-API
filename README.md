@@ -1,4 +1,4 @@
-<h1>Gipy</h1>
+<h1>Giphy</h1>
 <h3>Live Preview</h3>
     <a href="https://irfanp90.github.io/GIPHY-API/" target="_blank">Giphy</a>
 <h3>Description</h3>
